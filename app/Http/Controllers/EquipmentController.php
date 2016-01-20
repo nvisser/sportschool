@@ -25,8 +25,8 @@ class EquipmentController extends Controller
         });
         // Get today's range
         $now = new Carbon('now');
-        $start = $now->copy()->hour(0)->minute(0)->second(0);
-        $end = $now->copy()->hour(23)->minute(59)->second(59);
+        $start = clone $now->hour(0)->minute(0)->second(0);
+        $end = clone $now->hour(23)->minute(59)->second(59);
 
         $user = \Auth::id();
         $checkins = Checkin::whereIn('equipment_id', $eq)
@@ -123,8 +123,8 @@ class EquipmentController extends Controller
 
         // Get today's range
         $now = new Carbon('now');
-        $start = $now->copy()->hour(0)->minute(0)->second(0);
-        $end = $now->copy()->hour(23)->minute(59)->second(59);
+        $start = clone $now->hour(0)->minute(0)->second(0);
+        $end = clone $now->hour(23)->minute(59)->second(59);
 
         // Not checked out, checked in, and checkin was today
         $checkin = Checkin::where('user_id', $user)
@@ -151,8 +151,8 @@ class EquipmentController extends Controller
 
         // Get today's range
         $now = new Carbon('now');
-        $start = $now->copy()->hour(0)->minute(0)->second(0);
-        $end = $now->copy()->hour(23)->minute(59)->second(59);
+        $start = clone $now->hour(0)->minute(0)->second(0);
+        $end = clone $now->hour(23)->minute(59)->second(59);
 
         // Not checked out, checked in, and checkin was today
         $checkin = Checkin::where('user_id', $user)
