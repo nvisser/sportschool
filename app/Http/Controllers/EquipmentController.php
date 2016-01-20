@@ -93,6 +93,6 @@ class EquipmentController extends Controller
     {
         $equipment = Equipment::findOrFail($id);
         $user = \Auth::id();
-        dd($user);
+
     }
 }
