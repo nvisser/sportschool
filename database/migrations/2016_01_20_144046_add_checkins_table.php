@@ -16,8 +16,8 @@ class AddCheckinsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('equipment_id');
             $table->unsignedInteger('user_id');
-            $table->dateTime('checkin');
-            $table->dateTime('checkout');
+            $table->dateTime('checkin')->nullable()->default(null);
+            $table->dateTime('checkout')->nullable()->default(null);
             $table->timestamps();
         });
     }

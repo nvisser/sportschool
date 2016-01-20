@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Checkin;
 use App\Equipment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -94,5 +96,21 @@ class EquipmentController extends Controller
         $equipment = Equipment::findOrFail($id);
         $user = \Auth::id();
 
+        $now = new Carbon('now');
+        $start = $now->copy()->hour(0)->minute(0)->second(0);
+        $end = $now->copy()->hour(23)->minute(59)->second(59);
+
+        // Not checked out, checked in, and checkin was today
+        $checkin = Checkin::where('user_id', $user)
+            ->where('equipment_id', $id)
+            ->whereNotNull('checkin')
+            ->whereNull('checkout')
+            ->whereBetween('checkin', [$start, $end])->first();
+//        dd($checkin);
+        if ($checkin !== null) {
+            return "Error: You're already checked in.";
+        }
+        dd($now);
+//        Checkin::create()
     }
 }

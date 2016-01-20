@@ -13,13 +13,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="six columns">
-                <label for="lEmail">Calories per minute</label>
+            <div class="twelve columns">
+                <label for="lCaloriespm">Calories per minute</label>
                 <input name="calories_pm" id="lCaloriespm" type="text" class="u-full-width" placeholder="Calories per minute">
-            </div>
-            <div class="six columns">
-                <label for="lPassword">Weight</label>
-                <input name="weight" id="lWeight" type="text" class="u-full-width" placeholder="Weight">
             </div>
         </div>
         <div class="row">
