@@ -38,17 +38,17 @@ Route::group(['middleware' => ['web']], function () {
         'auth' => 'Auth\AuthController',
         'password' => 'Auth\PasswordController',
     ]);
-    Route::resource('equipment', 'EquipmentController');
-    Route::get('checkin/{id}', ['uses' => 'EquipmentController@checkin', 'as' => 'equipment.checkin']);
-    Route::get('checkout/{id}', ['uses' => 'EquipmentController@checkout', 'as' => 'equipment.checkout']);
 
+    Route::group(['middleware' => ['auth']], function () {
+        Route::resource('equipment', 'EquipmentController');
+        Route::get('checkin/{id}', ['uses' => 'EquipmentController@checkin', 'as' => 'equipment.checkin']);
+        Route::get('checkout/{id}', ['uses' => 'EquipmentController@checkout', 'as' => 'equipment.checkout']);
 
-
-
-    Route::get('logout', [
-        'uses' => 'Auth\AuthController@logout',
-        'as' => 'auth.logout'
-    ]);
+        Route::get('logout', [
+            'uses' => 'Auth\AuthController@logout',
+            'as' => 'auth.logout'
+        ]);
+    });
 
     Route::get('usercount', function() {
         $premium = \App\User::where('subscription', 'premium')->count();
