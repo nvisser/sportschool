@@ -21,8 +21,12 @@
                     {{ $eq->calories_pm }}
                 </td>
                 <td>
-                    <!-- @todo check in/check out -->
+                    <?php if ($eq->checked_in): ?>
+                    <a href="<?= route('equipment.checkout', $eq->id) ?>" class="button button-primary">Check out
+                        (Checked in <?= (new \Carbon\Carbon($eq->checkin))->diffForHumans() ?>)</a>
+                    <?php else: ?>
                     <a class="button" href="<?= route('equipment.checkin', $eq->id) ?>">Check in</a>
+                    <?php endif ?>
                 </td>
             </tr>
         @empty
