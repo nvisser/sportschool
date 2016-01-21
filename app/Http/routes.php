@@ -44,7 +44,7 @@ Route::group(['middleware' => ['web']], function () {
             $user = Auth::user();
             return view('auth.profile', compact('user'));
         });
-        Route::post('profile', ['uses' => 'Auth\AuthController@updateProfile', 'as' => 'auth.updateprofile']);
+        Route::put('updateprofile', ['uses' => 'Auth\AuthController@update_profile', 'as' => 'auth.updateprofile']);
 
         Route::get('logout', [
             'uses' => 'Auth\AuthController@logout',
@@ -55,6 +55,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('usercount', function () {
         $premium = \App\User::where('subscription', 'premium')->count();
         $total = \App\User::count();
-        return view('auth.count', compact('premium', 'total'));
+        $loggedin = \App\Session::whereNotNull('user_id')->count();
+        return view('auth.count', compact('premium', 'total', 'loggedin'));
     });
 });

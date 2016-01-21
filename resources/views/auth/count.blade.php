@@ -6,4 +6,6 @@
     <dd><?= $total ?></dd>
     <dt>Premium users:</dt>
     <dd><?= $premium ?></dd>
+    <dt>Logged in users:</dt>
+    <dd><?= $loggedin ?></dd>
 @stop

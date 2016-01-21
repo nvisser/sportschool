@@ -23,20 +23,20 @@
         <div class="row">
             <div class="twelve columns">
                 <label for="lAddress">Adres</label>
-                <input name="address" type="text" placeholder="Adres" id="lAddress" class="u-full-width">
+                <input name="address" type="text" placeholder="Adres" id="lAddress" class="u-full-width" value="<?= old('address', $user->address) ?>">
             </div>
         </div>
         <div class="row">
             <div class="twelve columns">
                 <label for="lBank">Bankrekening</label>
                 <input name="bank" type="text" placeholder="Bankrekening" id="lBank" class="u-full-width"
-                       readonly="readonly">
+                       value="<?= old('bank', $user->bank) ?>" readonly="readonly">
             </div>
         </div>
 
         <div class="row">
             <div class="twelve columns">
-                <button type="submit" class="button-primary">Login</button>
+                <button type="submit" class="button-primary">Save</button>
             </div>
         </div>
     </form>
