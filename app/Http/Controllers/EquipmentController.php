@@ -20,6 +20,9 @@ class EquipmentController extends Controller
     public function index()
     {
         $equipment = Equipment::all();
+        if (count($equipment) < 1) {
+            return view('equipment.index', compact('equipment'));
+        }
         $eq = $equipment->map(function ($item, $key) {
             return $item->id;
         });
@@ -170,4 +173,9 @@ class EquipmentController extends Controller
         $checkin->update(['checkout' => (new \DateTime)]);
         return redirect()->back(); // "You have been checked out";
     }
+
+//    public function ()
+//    {
+//
+//    }
 }
