@@ -1,15 +1,43 @@
-@extends('layout.index')
+@extends('layout/index')
 @section('title', 'Profile')
 @section('content')
     <h2>@yield('title')</h2>
-    <dt>Naam:</dt>
-    <dd><?= $user->name ?></dd>
-    <dt>Email:</dt>
-    <dd><?= $user->email ?></dd>
-    <dt>Adres:</dt>
-    <dd><?= $user->address ?></dd>
-    <dt>Bank:</dt>
-    <dd><?= $user->bank ? $user->bank : 'Geen' ?></dd>
-    <dt>Registratie datum:</dt>
-    <dd><?= $user->created_at->format('Y-m-d') ?></dd>
+    <form action="<?= route('auth.updateprofile') ?>" method="post" accept-charset="utf-8"
+          autocomplete="off">
+        <?= csrf_field() ?>
+        <?= method_field('put'); ?>
+        @include('_errors')
+        <div class="row">
+            <div class="six columns">
+                <label for="lName">Your Name</label>
+                <input name="name" id="lName" type="text" class="u-full-width" placeholder="Name"
+                       value="<?= old('name', $user->name) ?>">
+            </div>
+            <div class="six columns">
+                <label for="lEmail">Your Email</label>
+                <input name="email" id="lEmail" type="text" class="u-full-width" placeholder="Email"
+                       value="<?= old('email', $user->email) ?>">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="twelve columns">
+                <label for="lAddress">Adres</label>
+                <input name="address" type="text" placeholder="Adres" id="lAddress" class="u-full-width">
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">
+                <label for="lBank">Bankrekening</label>
+                <input name="bank" type="text" placeholder="Bankrekening" id="lBank" class="u-full-width"
+                       readonly="readonly">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="twelve columns">
+                <button type="submit" class="button-primary">Login</button>
+            </div>
+        </div>
+    </form>
 @stop

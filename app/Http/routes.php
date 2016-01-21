@@ -27,10 +27,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/', function () {
         return view('homepage');
     });
-    Route::get('profile', function() {
-        $user = \Auth::user();
-        return view('auth.profile', compact('user'));
-    }); // ['uses' => 'Auth\AuthController@showprofile', 'as' => 'auth.profile']);
     Route::get('/home', function () {
         return view('homepage');
     });
@@ -44,13 +40,19 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('checkin/{id}', ['uses' => 'EquipmentController@checkin', 'as' => 'equipment.checkin']);
         Route::get('checkout/{id}', ['uses' => 'EquipmentController@checkout', 'as' => 'equipment.checkout']);
 
+        Route::get('profile', function () {
+            $user = Auth::user();
+            return view('auth.profile', compact('user'));
+        });
+        Route::post('profile', ['uses' => 'Auth\AuthController@updateProfile', 'as' => 'auth.updateprofile']);
+
         Route::get('logout', [
             'uses' => 'Auth\AuthController@logout',
             'as' => 'auth.logout'
         ]);
     });
 
-    Route::get('usercount', function() {
+    Route::get('usercount', function () {
         $premium = \App\User::where('subscription', 'premium')->count();
         $total = \App\User::count();
         return view('auth.count', compact('premium', 'total'));
