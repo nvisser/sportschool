@@ -18,6 +18,17 @@ class AddCheckinsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->dateTime('checkin')->nullable()->default(null);
             $table->dateTime('checkout')->nullable()->default(null);
+
+            $table->foreign('equipment_id')
+                ->references('id')
+                ->on('equipment')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
