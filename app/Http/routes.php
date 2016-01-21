@@ -55,7 +55,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('usercount', function () {
         $premium = \App\User::where('subscription', 'premium')->count();
         $total = \App\User::count();
-        $loggedin = \App\Session::whereNotNull('user_id')->count();
-        return view('auth.count', compact('premium', 'total', 'loggedin'));
+        $loggedin = \App\Session::whereNotNull('user_id')
+            ->get();
+        $uids = $loggedin->map(function ($item, $key) {
+            return $item->user_id;
+        });
+        $loggedinusers = \App\User::whereIn('id', $uids)->get()->groupBy('location');
+        return view('auth.count', compact('premium', 'total', 'loggedin', 'loggedinusers'));
     });
 });
