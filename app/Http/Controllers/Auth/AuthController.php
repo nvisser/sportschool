@@ -94,6 +94,7 @@ class AuthController extends Controller
 
     /**
      * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update_profile(Request $request)
     {
@@ -101,5 +102,11 @@ class AuthController extends Controller
         $data = $request->except(['_token', '_method']);
         $user->update($data);
         return redirect()->back();
+    }
+
+    public function progress()
+    {
+        $user = \Auth::user();
+        dd($user);
     }
 }

@@ -46,6 +46,8 @@ Route::group(['middleware' => ['web']], function () {
         });
         Route::put('updateprofile', ['uses' => 'Auth\AuthController@update_profile', 'as' => 'auth.updateprofile']);
 
+        Route::get('progress', ['uses' => 'Auth\AuthController@progress', 'as' => 'auth.progress']);
+
         Route::get('logout', [
             'uses' => 'Auth\AuthController@logout',
             'as' => 'auth.logout'

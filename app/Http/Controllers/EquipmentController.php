@@ -33,6 +33,7 @@ class EquipmentController extends Controller
 
         $user = \Auth::id();
         $checkins = Checkin::whereIn('equipment_id', $eq)
+            ->where('user_id', $user)
             ->whereBetween('checkin', [$start, $end])
             ->whereNull('checkout')
             ->get();
@@ -40,7 +41,6 @@ class EquipmentController extends Controller
             $equipment->where('id', $ch->equipment_id)->first()->checked_in = true;
             $equipment->where('id', $ch->equipment_id)->first()->checkin = $ch->checkin;
         }
-//        dd($equipment);
 
         return view('equipment.index', compact('equipment'));
     }
