@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Checkin;
+use App\Equipment;
 use App\User;
+use Carbon\Carbon;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -104,9 +107,81 @@ class AuthController extends Controller
         return redirect()->back();
     }
 
-    public function progress()
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function stats()
     {
-        $user = \Auth::user();
-        dd($user);
+        $user = \Auth::id();
+
+        $now = new Carbon;
+        $currentFirstDay = clone $now;
+        $currentFirstDay = $currentFirstDay->firstOfMonth();
+        $currentLastDay = clone $now;
+        $currentLastDay = $currentLastDay->lastOfMonth();
+
+        $thisMonth = Checkin::where('user_id', $user)
+            ->whereBetween('checkin', [$currentFirstDay, $currentLastDay])
+            ->whereBetween('checkout', [$currentFirstDay, $currentLastDay])
+            ->orderBy('checkout')
+            ->get();
+
+        $stats['current']['total'] = $thisMonth->sum('burned');
+        $stats['current']['min'] = $thisMonth->min('burned');
+        $stats['current']['max'] = $thisMonth->max('burned');
+
+        $previousLastDay = clone $currentFirstDay;
+        $previousLastDay = $previousLastDay->modify('-1 day');
+        $previousFirstDay = clone $previousLastDay;
+        $previousFirstDay = $previousFirstDay->firstOfMonth();
+
+        $previousMonth = Checkin::where('user_id', $user)
+            ->whereBetween('checkin', [$previousFirstDay, $previousLastDay])
+            ->whereBetween('checkout', [$previousFirstDay, $previousLastDay])
+            ->orderBy('checkout')
+            ->get();
+        $stats['previous']['total'] = $previousMonth->sum('burned');
+        $stats['previous']['min'] = $previousMonth->min('burned');
+        $stats['previous']['max'] = $previousMonth->max('burned');
+
+        if ($stats['current']['total'] < $stats['previous']['total']) {
+            $stats['difference'] = $stats['previous']['total'] - $stats['current']['total'];
+            $stats['suggestion'] = Equipment::orderBy('calories_pm', 'desc')->first();
+        }
+
+        return view('equipment.progress', $stats);
+    }
+
+    public function advice()
+    {
+        $equipment = Equipment::all();
+        return view('auth.advice', compact('equipment'));
+    }
+
+    public function requestadvice(Request $request)
+    {
+        $data['user'] = \Auth::user()->name . ' (' . \Auth::user()->email . ')';
+        $data['date'] = (new \DateTime())->format('Y-m-d H:i:s');
+        $data += $request->except('_token');
+        $emailcontent = "<h2>You've received a request for advice:</h2>\n";
+        $emailcontent .= "<table>\n";
+        foreach ($data as $key => $value) {
+            $emailcontent .= <<<CONTENT
+<tr>
+    <th>$key</th>
+    <td>$value</td>
+</tr>
+
+CONTENT;
+
+        }
+        $emailcontent .= "</table>";
+        \Mail::raw($emailcontent, function ($message) {
+            $message->subject('Request for advice')
+                ->from('noreply@sportschool.nl', 'Sportschool noreply')
+                ->replyto(\Auth::user()->email, \Auth::user()->name)
+                ->to('sportschool@bcome.nl');
+        });
+        return 'Your request for advice has beent sent.';
     }
 }

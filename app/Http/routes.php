@@ -46,7 +46,9 @@ Route::group(['middleware' => ['web']], function () {
         });
         Route::put('updateprofile', ['uses' => 'Auth\AuthController@update_profile', 'as' => 'auth.updateprofile']);
 
-        Route::get('progress', ['uses' => 'Auth\AuthController@progress', 'as' => 'auth.progress']);
+        Route::get('stats', ['uses' => 'Auth\AuthController@stats', 'as' => 'auth.stats']);
+        Route::get('advice', ['uses' => 'Auth\AuthController@advice', 'as' => 'auth.advice']);
+        Route::post('advice', ['uses' => 'Auth\AuthController@requestadvice', 'as' => 'auth.postadvice']);
 
         Route::get('logout', [
             'uses' => 'Auth\AuthController@logout',

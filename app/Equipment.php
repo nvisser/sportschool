@@ -23,4 +23,9 @@ class Equipment extends Model
     protected $hidden = [
 
     ];
+
+    public function checkins()
+    {
+        return $this->hasMany('App\Checkin');
+    }
 }
