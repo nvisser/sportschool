@@ -63,7 +63,7 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only(['name', 'calories_pm', 'weight']);
+        $data = $request->only(['name', 'calories_pm']);
         Equipment::create($data);
         return redirect()->route('equipment.index');
     }
