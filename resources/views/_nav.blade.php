@@ -4,6 +4,7 @@
             <li class="navbar-item"><a class="navbar-link" href="<?= url('/home') ?>">Home</a></li>
             <?php if (\Auth::check()): ?>
             <li class="navbar-item"><a href="<?= route('equipment.index') ?>" class="navbar-link">Equipment</a></li>
+            <li class="navbar-item"><a href="<?= route('auth.stats') ?>" class="navbar-link">My Stats</a></li>
             <li class="navbar-item">
                 <a class="navbar-text" data-popover="#userInfoPopover" href="javascript:void(0);">User</a>
 
