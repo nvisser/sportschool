@@ -10,7 +10,7 @@
             <div class="six columns">
                 <label for="lEmail">Your Email</label>
                 <input name="email" id="lEmail" type="text" class="u-full-width" placeholder="Email"
-                       value="niek@bcome.nl">
+                       value="">
             </div>
             <div class="six columns">
                 <label for="lPassword">Your Password</label>
