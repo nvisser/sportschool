@@ -54,7 +54,7 @@
 
         <div class="row">
             <div class="twelve columns">
-                <button type="submit" class="button-primary">Login</button>
+                <button type="submit" class="button-primary">Register</button>
             </div>
         </div>
     </form>
