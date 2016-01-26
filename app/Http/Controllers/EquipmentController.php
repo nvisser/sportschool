@@ -130,14 +130,16 @@ class EquipmentController extends Controller
         $end = clone $now->hour(23)->minute(59)->second(59);
 
         // Not checked out, checked in, and checkin was today
-        $checkin = Checkin::where('user_id', $user)
-            ->where('equipment_id', $id)
+        $checkins = Checkin::where('user_id', $user)
+//            ->where('equipment_id', $id)
             ->whereNotNull('checkin')
             ->whereNull('checkout')
-            ->whereBetween('checkin', [$start, $end])->first();
+            ->whereBetween('checkin', [$start, $end])->get();
+
+        $checkin = $checkins->where('equipment_id', $id);
 
         // Double checkin? No sir
-        if ($checkin !== null) {
+        if ($checkins->count() > 0 || $checkin !== null) {
             return "Error: You're already checked in.";
         }
 
