@@ -135,11 +135,10 @@ class EquipmentController extends Controller
             ->whereNotNull('checkin')
             ->whereNull('checkout')
             ->whereBetween('checkin', [$start, $end])->get();
-
-        $checkin = $checkins->where('equipment_id', $id);
+//        dd($checkins->where('equipment_id', $id)->count());
 
         // Double checkin? No sir
-        if ($checkins->count() > 0 || $checkin !== null) {
+        if ($checkins->count() > 0) {
             return "Error: You're already checked in.";
         }
 
