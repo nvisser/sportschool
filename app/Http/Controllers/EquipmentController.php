@@ -115,8 +115,9 @@ class EquipmentController extends Controller
 
     /**
      * Check in on equipment
-     * @param int $id
-     * @return string
+     *
+     * @param int $id The equipment you want to check in on
+     * @return \Illuminate\Http\RedirectResponse|string
      */
     public function checkin($id)
     {
@@ -131,11 +132,9 @@ class EquipmentController extends Controller
 
         // Not checked out, checked in, and checkin was today
         $checkins = Checkin::where('user_id', $user)
-//            ->where('equipment_id', $id)
             ->whereNotNull('checkin')
             ->whereNull('checkout')
             ->whereBetween('checkin', [$start, $end])->get();
-//        dd($checkins->where('equipment_id', $id)->count());
 
         // Double checkin? No sir
         if ($checkins->count() > 0) {
@@ -143,13 +142,22 @@ class EquipmentController extends Controller
         }
 
         // All is well, write checkin to database
-        Checkin::create(['id' => 1, 'equipment_id' => $id, 'user_id' => $user, 'checkin' => (new \DateTime)]);
-        return redirect()->back(); // "You have been checked in";
+        Checkin::create([
+            'id' => 1,
+            'equipment_id' => $id,
+            'user_id' => $user,
+            'checkin' => new \DateTime
+        ]);
+        return redirect()->back();
     }
 
+    /**
+     * @param int $id The equipment you want to check out on
+     * @return \Illuminate\Http\RedirectResponse|string
+     */
     public function checkout($id)
     {
-        // FindOrFail because we don't want anyone checking in on nonexistant equipment
+        // FindOrFail because we don't want anyone checking out on nonexistant equipment
         $equipment = Equipment::findOrFail($id);
         $user = \Auth::id();
 
@@ -171,7 +179,9 @@ class EquipmentController extends Controller
         }
 
         // All is well, write checkout to database
-        $checkin->update(['checkout' => (new \DateTime)]);
+        $checkin->update([
+            'checkout' => new \DateTime
+        ]);
         return redirect()->back(); // "You have been checked out";
     }
 
